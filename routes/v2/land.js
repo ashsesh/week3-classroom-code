@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', (req, res, next) => {
-  console.log("get /")
-  res.send('hello!')
+  console.log("get /v2/land")
+
+  res.status(204).send();
   next()
 })
 

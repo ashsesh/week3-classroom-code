@@ -3,9 +3,11 @@ var router = express.Router();
 const carData = require('../data/cars.json')
 
 // {"id":4,"name":"ford torino","mpg":"17","weight":"3449","origin":"usa","year":"1970"}
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
+  console.log("post /cars")
   if(!req.query.name || !req.query.mpg || !req.query.weight || !req.query.origin || !req.query.year){
-    res.send({message: "Please send name, mpg, weight, origin, and year as query parameters"});
+    res.status(422).send({message: "Please send name, mpg, weight, origin, and year as query parameters"});
+    next()
     return;
   }
 
@@ -18,25 +20,31 @@ router.post('/', (req, res) => {
     id: Math.floor(Math.random() * 90000)
   }
 
-  res.send({data: newCar});
-
+  res.status(201).send({data: newCar});
+  next()
 })
 
-router.get('/', (req, res) => {
-  console.log(req.query.id)
+router.get('/', (req, res, next) => {
+  console.log("get /cars id validation")
   if(!req.query.id){
-    res.send({message: "Please send an id as a query parameter"});
+    res.status(422).send({message: "Please send an id as a query parameter"});
     return;
   }
-
   let theCar = carData.find((el)=> el.id == req.query.id )
 
   if(!theCar){
-    res.send({message: "There is no car with that id"});
+    res.status(404).send({message: "There is no car with that id"});
     return;
   }
+  res.locals.theCar = theCar;
+  next();
+})
 
-  res.send({data: theCar});
+router.get('/', (req, res, next) => {
+  console.log("get /cars")
+
+  res.status(200).send({data: res.locals.theCar});
+  next()
 })
 
 module.exports = router;
