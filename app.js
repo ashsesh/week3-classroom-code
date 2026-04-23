@@ -5,7 +5,7 @@ var indexRouter = require('./routes/index');
 var carsRouter = require('./routes/cars');
 var landRouter = require('./routes/v2/land');
 
-// Run with 'node app.js'
+// Run with 'node app.js' - test
 // See output with curl (in new terminal tab) or browser at http://localhost:3000/
 app.use((req, res, next) => {
   console.log('Time:', Date.now())
